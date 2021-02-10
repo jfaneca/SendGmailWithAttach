@@ -17,6 +17,7 @@ namespace SendGmailWithAttach
     public partial class Form1 : Form
     {
         private List<EmailData> emails2Process;
+        private int currentPosition;
 
         public Form1()
         {
@@ -35,20 +36,11 @@ namespace SendGmailWithAttach
 
         private void btSend_Click(object sender, EventArgs e)
         {
+            this.currentPosition = 0;
             if (ValidateFile())
             {
-                int i = 1;
-                foreach(EmailData emailData in this.emails2Process)
-                {
-                    lblProgress.Text = "A enviar " + i + " de um total de " + this.emails2Process.Count + " registos por processar";
-                    SendEmail(emailData.EmailAddress, emailData.AttachFile);
-                    if (i++ < this.emails2Process.Count) 
-                    {
-                        Thread.Sleep(int.Parse(tbDelay.Text) * 1000); 
-                    }
-                }
-
-                MessageBox.Show("Todos os emails foram enviados!");
+                myTimer.Interval = 100;
+                myTimer.Start();
             }
         }
 
@@ -164,6 +156,33 @@ namespace SendGmailWithAttach
         private void Form1_Load(object sender, EventArgs e)
         {
             lblProgress.Text = "";
+        }
+
+        private void myTimer_Tick(object sender, EventArgs e)
+        {
+            if (this.currentPosition == 0)
+            {
+                myTimer.Stop();
+                SendCurrentPosition();
+                myTimer.Interval = int.Parse(tbDelay.Text) * 1000;
+                myTimer.Start();
+            }
+            else
+            {
+                SendCurrentPosition();
+            }
+        }
+
+        private void SendCurrentPosition()
+        {
+            EmailData emailData = this.emails2Process[this.currentPosition];
+            lblProgress.Text = "A enviar " + (++this.currentPosition) + " de um total de " + this.emails2Process.Count + " registos por processar";
+            //SendEmail(emailData.EmailAddress, emailData.AttachFile);
+            if (this.currentPosition >= this.emails2Process.Count)
+            {
+                myTimer.Stop();
+                MessageBox.Show("Todos os emails foram enviados!");
+            }
         }
     }
 }
