@@ -113,12 +113,18 @@ namespace SendGmailWithAttach
         private List<EmailData> ReadReceiversFile()
         {
             List<EmailData> emails = new List<EmailData>();
+            Char separator = ';';
             using (StreamReader reader = new StreamReader(tbFile.Text))
             {
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
-                    var values = line.Split(',');
+                    var values = line.Split(separator);
+                    if (values.Count<String>() == 1)
+                    {
+                        separator = ',';
+                        values = line.Split(separator);
+                    }
                     emails.Add(new EmailData(values[0], values[1]));
                 }
             }
@@ -177,7 +183,7 @@ namespace SendGmailWithAttach
         {
             EmailData emailData = this.emails2Process[this.currentPosition];
             lblProgress.Text = "A enviar " + (++this.currentPosition) + " de um total de " + this.emails2Process.Count + " registos por processar";
-            SendEmail(emailData.EmailAddress, emailData.AttachFile);
+            SendEmail(emailData.EmailAddress.Trim(), emailData.AttachFile);
             if (this.currentPosition >= this.emails2Process.Count)
             {
                 myTimer.Stop();
