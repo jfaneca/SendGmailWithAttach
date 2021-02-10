@@ -177,7 +177,7 @@ namespace SendGmailWithAttach
         {
             EmailData emailData = this.emails2Process[this.currentPosition];
             lblProgress.Text = "A enviar " + (++this.currentPosition) + " de um total de " + this.emails2Process.Count + " registos por processar";
-            //SendEmail(emailData.EmailAddress, emailData.AttachFile);
+            SendEmail(emailData.EmailAddress, emailData.AttachFile);
             if (this.currentPosition >= this.emails2Process.Count)
             {
                 myTimer.Stop();
