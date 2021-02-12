@@ -87,7 +87,7 @@
             // tbUser
             // 
             this.tbUser.Location = new System.Drawing.Point(81, 35);
-            this.tbUser.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbUser.Margin = new System.Windows.Forms.Padding(2);
             this.tbUser.Name = "tbUser";
             this.tbUser.Size = new System.Drawing.Size(129, 20);
             this.tbUser.TabIndex = 2;
@@ -95,7 +95,7 @@
             // tbPwd
             // 
             this.tbPwd.Location = new System.Drawing.Point(81, 62);
-            this.tbPwd.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbPwd.Margin = new System.Windows.Forms.Padding(2);
             this.tbPwd.Name = "tbPwd";
             this.tbPwd.Size = new System.Drawing.Size(129, 20);
             this.tbPwd.TabIndex = 3;
@@ -103,7 +103,7 @@
             // tbFile
             // 
             this.tbFile.Location = new System.Drawing.Point(81, 92);
-            this.tbFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbFile.Margin = new System.Windows.Forms.Padding(2);
             this.tbFile.Name = "tbFile";
             this.tbFile.Size = new System.Drawing.Size(323, 20);
             this.tbFile.TabIndex = 4;
@@ -111,7 +111,7 @@
             // btBrowse
             // 
             this.btBrowse.Location = new System.Drawing.Point(407, 92);
-            this.btBrowse.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btBrowse.Margin = new System.Windows.Forms.Padding(2);
             this.btBrowse.Name = "btBrowse";
             this.btBrowse.Size = new System.Drawing.Size(68, 19);
             this.btBrowse.TabIndex = 5;
@@ -122,7 +122,7 @@
             // btSend
             // 
             this.btSend.Location = new System.Drawing.Point(407, 275);
-            this.btSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btSend.Margin = new System.Windows.Forms.Padding(2);
             this.btSend.Name = "btSend";
             this.btSend.Size = new System.Drawing.Size(68, 19);
             this.btSend.TabIndex = 10;
@@ -138,7 +138,7 @@
             // tbSender
             // 
             this.tbSender.Location = new System.Drawing.Point(81, 9);
-            this.tbSender.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbSender.Margin = new System.Windows.Forms.Padding(2);
             this.tbSender.Name = "tbSender";
             this.tbSender.Size = new System.Drawing.Size(129, 20);
             this.tbSender.TabIndex = 1;
@@ -157,7 +157,7 @@
             // tbSubject
             // 
             this.tbSubject.Location = new System.Drawing.Point(81, 122);
-            this.tbSubject.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbSubject.Margin = new System.Windows.Forms.Padding(2);
             this.tbSubject.Name = "tbSubject";
             this.tbSubject.Size = new System.Drawing.Size(395, 20);
             this.tbSubject.TabIndex = 6;
@@ -176,7 +176,7 @@
             // tbBody
             // 
             this.tbBody.Location = new System.Drawing.Point(81, 154);
-            this.tbBody.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbBody.Margin = new System.Windows.Forms.Padding(2);
             this.tbBody.Multiline = true;
             this.tbBody.Name = "tbBody";
             this.tbBody.Size = new System.Drawing.Size(395, 76);
@@ -197,7 +197,7 @@
             // btValidate
             // 
             this.btValidate.Location = new System.Drawing.Point(81, 275);
-            this.btValidate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btValidate.Margin = new System.Windows.Forms.Padding(2);
             this.btValidate.Name = "btValidate";
             this.btValidate.Size = new System.Drawing.Size(68, 19);
             this.btValidate.TabIndex = 9;
@@ -208,11 +208,11 @@
             // tbDelay
             // 
             this.tbDelay.Location = new System.Drawing.Point(81, 243);
-            this.tbDelay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbDelay.Margin = new System.Windows.Forms.Padding(2);
             this.tbDelay.Name = "tbDelay";
             this.tbDelay.Size = new System.Drawing.Size(21, 20);
             this.tbDelay.TabIndex = 8;
-            this.tbDelay.Text = "30";
+            this.tbDelay.Text = "5";
             // 
             // label6
             // 
@@ -263,9 +263,9 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
-            this.Text = "Gmail Sender v 0.2";
+            this.Text = "Gmail Sender v 0.3";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

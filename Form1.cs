@@ -18,6 +18,11 @@ namespace SendGmailWithAttach
     {
         private List<EmailData> emails2Process;
         private int currentPosition;
+        private Char fieldSeparator = ';';
+        private String errorLogFileName;
+        private String errorRecordFileName;
+        private int errorCount;
+        private Logger logger;
 
         public Form1()
         {
@@ -37,11 +42,22 @@ namespace SendGmailWithAttach
         private void btSend_Click(object sender, EventArgs e)
         {
             this.currentPosition = 0;
+            this.errorCount = 0;
+            SetErrorLogFilename();
             if (ValidateFile())
             {
+                this.logger = new Logger(this.fieldSeparator, this.errorLogFileName, this.errorRecordFileName);
                 myTimer.Interval = 100;
                 myTimer.Start();
             }
+        }
+
+        private void SetErrorLogFilename()
+        {
+            String baseFolder = Path.GetDirectoryName(openFileDialog.FileName);
+            String timeStamp = DateTime.Now.ToShortDateString() + "_" + DateTime.Now.ToLongTimeString().Replace(':','_');
+            this.errorRecordFileName = baseFolder + "\\error_records_" + timeStamp + ".csv";
+            this.errorLogFileName = baseFolder + "\\error_log_" + timeStamp + ".txt";
         }
 
         private Boolean ValidateFile()
@@ -113,17 +129,16 @@ namespace SendGmailWithAttach
         private List<EmailData> ReadReceiversFile()
         {
             List<EmailData> emails = new List<EmailData>();
-            Char separator = ';';
             using (StreamReader reader = new StreamReader(tbFile.Text))
             {
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
-                    var values = line.Split(separator);
+                    var values = line.Split(fieldSeparator);
                     if (values.Count<String>() == 1)
                     {
-                        separator = ',';
-                        values = line.Split(separator);
+                        fieldSeparator = ',';
+                        values = line.Split(fieldSeparator);
                     }
                     emails.Add(new EmailData(values[0], values[1]));
                 }
@@ -136,19 +151,27 @@ namespace SendGmailWithAttach
         {
             String baseFolder = Path.GetDirectoryName(openFileDialog.FileName);
 
-            MailAddress mailfrom = new MailAddress(tbSender.Text);
-            MailAddress mailto = new MailAddress(receiver);
-            MailMessage newmsg = new MailMessage(mailfrom, mailto);
-            newmsg.Subject = tbSubject.Text;
-            newmsg.Body = tbBody.Text;
-            Attachment att = new Attachment(baseFolder + "\\" + attachedFile);
-            newmsg.Attachments.Add(att);
+            try
+            {
+                MailAddress mailfrom = new MailAddress(tbSender.Text);
+                MailAddress mailto = new MailAddress(receiver.Replace(" ",""));
+                MailMessage newmsg = new MailMessage(mailfrom, mailto);
+                newmsg.Subject = tbSubject.Text;
+                newmsg.Body = tbBody.Text;
+                Attachment att = new Attachment(baseFolder + "\\" + attachedFile);
+                newmsg.Attachments.Add(att);
 
-            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-            smtp.UseDefaultCredentials = false;
-            smtp.Credentials = new NetworkCredential(tbUser.Text, tbPwd.Text);
-            smtp.EnableSsl = true;
-            smtp.Send(newmsg);
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential(tbUser.Text, tbPwd.Text);
+                smtp.EnableSsl = true;
+                smtp.Send(newmsg);
+            }
+            catch (Exception ex)
+            {
+                this.errorCount++;
+                this.logger.Log(receiver, attachedFile, ex);
+            }
         }
 
         private void btValidate_Click(object sender, EventArgs e)
@@ -182,12 +205,27 @@ namespace SendGmailWithAttach
         private void SendCurrentPosition()
         {
             EmailData emailData = this.emails2Process[this.currentPosition];
-            lblProgress.Text = "A enviar " + (++this.currentPosition) + " de um total de " + this.emails2Process.Count + " registos por processar";
+            String msg = "A enviar " + (++this.currentPosition) + " de um total de " + this.emails2Process.Count + "} por processar.";
+            if (this.errorCount > 0)
+            {
+                msg += this.errorCount.ToString() + " erros";
+            }
+            lblProgress.Text = msg;
             SendEmail(emailData.EmailAddress.Trim(), emailData.AttachFile);
             if (this.currentPosition >= this.emails2Process.Count)
             {
                 myTimer.Stop();
-                MessageBox.Show("Todos os emails foram enviados!");
+                if (this.errorCount == 0)
+                {
+                    MessageBox.Show("Todos os emails foram enviados com sucesso!");
+                }
+                else
+                {
+                    MessageBox.Show("Foram enviados " + 
+                        (this.emails2Process.Count - this.errorCount) + 
+                        " de um total de " + this.emails2Process.Count +
+                        ".\r\nO ficheiro " + this.errorRecordFileName + " contém os registos não enviados!");
+                }
             }
         }
     }
