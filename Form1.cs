@@ -55,8 +55,8 @@ namespace SendGmailWithAttach
         private void SetErrorLogFilename()
         {
             String baseFolder = Path.GetDirectoryName(openFileDialog.FileName);
-            String timeStamp = DateTime.Now.ToShortDateString() + "_" + DateTime.Now.ToLongTimeString();
-            this.errorLogFileName = baseFolder + "\\error_records_" + timeStamp + ".csv";
+            String timeStamp = DateTime.Now.ToShortDateString() + "_" + DateTime.Now.ToLongTimeString().Replace(':','_');
+            this.errorRecordFileName = baseFolder + "\\error_records_" + timeStamp + ".csv";
             this.errorLogFileName = baseFolder + "\\error_log_" + timeStamp + ".txt";
         }
 
@@ -154,7 +154,7 @@ namespace SendGmailWithAttach
             try
             {
                 MailAddress mailfrom = new MailAddress(tbSender.Text);
-                MailAddress mailto = new MailAddress(receiver);
+                MailAddress mailto = new MailAddress(receiver.Replace(" ",""));
                 MailMessage newmsg = new MailMessage(mailfrom, mailto);
                 newmsg.Subject = tbSubject.Text;
                 newmsg.Body = tbBody.Text;
@@ -205,12 +205,27 @@ namespace SendGmailWithAttach
         private void SendCurrentPosition()
         {
             EmailData emailData = this.emails2Process[this.currentPosition];
-            lblProgress.Text = "A enviar " + (++this.currentPosition) + " de um total de " + this.emails2Process.Count + " registos por processar";
+            String msg = "A enviar " + (++this.currentPosition) + " de um total de " + this.emails2Process.Count + "} por processar.";
+            if (this.errorCount > 0)
+            {
+                msg += this.errorCount.ToString() + " erros";
+            }
+            lblProgress.Text = msg;
             SendEmail(emailData.EmailAddress.Trim(), emailData.AttachFile);
             if (this.currentPosition >= this.emails2Process.Count)
             {
                 myTimer.Stop();
-                MessageBox.Show("Todos os emails foram enviados!");
+                if (this.errorCount == 0)
+                {
+                    MessageBox.Show("Todos os emails foram enviados com sucesso!");
+                }
+                else
+                {
+                    MessageBox.Show("Foram enviados " + 
+                        (this.emails2Process.Count - this.errorCount) + 
+                        " de um total de " + this.emails2Process.Count +
+                        ".\r\nO ficheiro " + this.errorRecordFileName + " contém os registos não enviados!");
+                }
             }
         }
     }

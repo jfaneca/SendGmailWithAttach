@@ -212,7 +212,7 @@
             this.tbDelay.Name = "tbDelay";
             this.tbDelay.Size = new System.Drawing.Size(21, 20);
             this.tbDelay.TabIndex = 8;
-            this.tbDelay.Text = "30";
+            this.tbDelay.Text = "5";
             // 
             // label6
             // 
