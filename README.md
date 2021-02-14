@@ -10,6 +10,8 @@ In order to make it easier getting a list of files from your file system, you ca
 
 ## Change log
 
+v 0.4 2021-02-14 : changes at the log file name, in order to support spanish date format + timer increase
+
 v 0.3 2021-02-12 : added support for error handling, supporting a file containing records not sent
 
 v 0.2 2021-02-10 : added support for "," or ";" field separator and trim values at email address values
