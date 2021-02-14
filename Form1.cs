@@ -47,7 +47,7 @@ namespace SendGmailWithAttach
             if (ValidateFile())
             {
                 this.logger = new Logger(this.fieldSeparator, this.errorLogFileName, this.errorRecordFileName);
-                myTimer.Interval = 100;
+                myTimer.Interval = 1000;
                 myTimer.Start();
             }
         }
@@ -55,7 +55,8 @@ namespace SendGmailWithAttach
         private void SetErrorLogFilename()
         {
             String baseFolder = Path.GetDirectoryName(openFileDialog.FileName);
-            String timeStamp = DateTime.Now.ToShortDateString() + "_" + DateTime.Now.ToLongTimeString().Replace(':','_');
+            String timeStamp = DateTime.Now.Year.ToString("0000") + DateTime.Now.Month.ToString("00") +
+                DateTime.Now.Day.ToString("00") + "_" + DateTime.Now.ToLongTimeString().Replace(':','_');
             this.errorRecordFileName = baseFolder + "\\error_records_" + timeStamp + ".csv";
             this.errorLogFileName = baseFolder + "\\error_log_" + timeStamp + ".txt";
         }
@@ -137,7 +138,7 @@ namespace SendGmailWithAttach
                     var values = line.Split(fieldSeparator);
                     if (values.Count<String>() == 1)
                     {
-                        fieldSeparator = ',';
+                        this.fieldSeparator = ',';
                         values = line.Split(fieldSeparator);
                     }
                     emails.Add(new EmailData(values[0], values[1]));
@@ -205,7 +206,7 @@ namespace SendGmailWithAttach
         private void SendCurrentPosition()
         {
             EmailData emailData = this.emails2Process[this.currentPosition];
-            String msg = "A enviar " + (++this.currentPosition) + " de um total de " + this.emails2Process.Count + "} por processar.";
+            String msg = "A enviar " + (++this.currentPosition) + " de um total de " + this.emails2Process.Count + " registos.";
             if (this.errorCount > 0)
             {
                 msg += this.errorCount.ToString() + " erros";
